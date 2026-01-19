@@ -150,8 +150,8 @@ Jerome et Stephanie Coppens - Lesieur`;
 
       // Send email using EmailJS
       await emailjs.send(
-        'YOUR_SERVICE_ID',  // We'll replace this
-        'YOUR_TEMPLATE_ID', // We'll replace this
+        'service_u2gb2og',  // We'll replace this
+        'template_8svi0g9', // We'll replace this
         templateParams
       );
 
