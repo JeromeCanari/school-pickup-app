@@ -3,7 +3,7 @@ import emailjs from '@emailjs/browser';
 import './App.css';
 
 // Initialize EmailJS with your public key (you'll add this after setting up EmailJS)
-emailjs.init("YOUR_PUBLIC_KEY"); // We'll replace this later
+emailjs.init("cfbRe3pJc2BrExC6b"); // We'll replace this later
 
 function App() {
   const [selectedKids, setSelectedKids] = useState({
