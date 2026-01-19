@@ -15,9 +15,10 @@ function App() {
   
   const [recipients, setRecipients] = useState({
     ecole_anse: true,
-    eloise: false,  // Elea's teacher (3/4e année)
-    valerie: false, // Malo's teacher (1ere année)
-    adele: true     // Admin
+    eloise: false,  // Elea's teacher #1 (3/4e année)
+    joanne: false,  // Elea's teacher #2 (3/4e année)
+    valerie: false, // Malo's teacher #1 (1ere année)
+    adele: false    // Malo's teacher #2 (1ere année)
   });
 
   const [sending, setSending] = useState(false);
@@ -28,7 +29,9 @@ function App() {
     setRecipients(prev => ({
       ...prev,
       eloise: selectedKids.elea,
-      valerie: selectedKids.malo
+      joanne: selectedKids.elea,
+      valerie: selectedKids.malo,
+      adele: selectedKids.malo
     }));
   }, [selectedKids]);
 
@@ -54,7 +57,8 @@ function App() {
   };
 
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
+    // Add time to ensure it's treated as local date, not UTC
+    const date = new Date(dateString + 'T00:00:00');
     const days = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
     const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 
                     'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
@@ -69,11 +73,11 @@ function App() {
 
   const getKidsText = () => {
     if (selectedKids.elea && selectedKids.malo) {
-      return 'Elea et Malo Coppens';
+      return 'Elea (3/4e année) et Malo (1ère année) Coppens';
     } else if (selectedKids.elea) {
-      return 'Elea Coppens';
+      return 'Elea (3/4e année) Coppens';
     } else if (selectedKids.malo) {
-      return 'Malo Coppens';
+      return 'Malo (1ère année) Coppens';
     }
     return '';
   };
@@ -104,6 +108,7 @@ Jerome et Stephanie Coppens - Lesieur`;
     const emails = [];
     if (recipients.ecole_anse) emails.push('ecole_anse_au_sable@csf.bc.ca');
     if (recipients.eloise) emails.push('eloise_lescaut@csf.bc.ca');
+    if (recipients.joanne) emails.push('joanne_booth@csf.bc.ca');
     if (recipients.valerie) emails.push('valerie_desnoyers@csf.bc.ca');
     if (recipients.adele) emails.push('adele_anctil@csf.bc.ca');
     return emails.join(', ');
@@ -120,19 +125,14 @@ Jerome et Stephanie Coppens - Lesieur`;
       return;
     }
 
-    const selectedRecipients = Object.values(recipients).filter(Boolean).length;
-    if (selectedRecipients === 0) {
-      setMessage('❌ Veuillez sélectionner au moins un destinataire');
-      return;
-    }
-
     setSending(true);
     setMessage('');
 
     try {
       // EmailJS template parameters
+      const recipientEmails = getRecipientEmails();
       const templateParams = {
-        to_email: getRecipientEmails(),
+        to_email: recipientEmails || 'jerome.coppens@gmail.com',
         cc_email: 'jerome.coppens@gmail.com, stephanie.lesieur@gmail.com',
         subject: getSubjectLine(),
         message: getEmailBody()
@@ -224,6 +224,14 @@ Jerome et Stephanie Coppens - Lesieur`;
             <label className="checkbox-label">
               <input
                 type="checkbox"
+                checked={recipients.joanne}
+                onChange={() => handleRecipientChange('joanne')}
+              />
+              <span>Joanne Booth - Enseignante Elea (joanne_booth@csf.bc.ca)</span>
+            </label>
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
                 checked={recipients.valerie}
                 onChange={() => handleRecipientChange('valerie')}
               />
@@ -235,7 +243,7 @@ Jerome et Stephanie Coppens - Lesieur`;
                 checked={recipients.adele}
                 onChange={() => handleRecipientChange('adele')}
               />
-              <span>Adèle Anctil - Admin (adele_anctil@csf.bc.ca)</span>
+              <span>Adèle Anctil - Enseignante Malo (adele_anctil@csf.bc.ca)</span>
             </label>
           </div>
           <p className="helper-text">CC: jerome.coppens@gmail.com, stephanie.lesieur@gmail.com</p>
@@ -245,6 +253,8 @@ Jerome et Stephanie Coppens - Lesieur`;
           <div className="section preview">
             <h2>Aperçu de l'email</h2>
             <div className="email-preview">
+              <p><strong>To:</strong> {getRecipientEmails() || 'jerome.coppens@gmail.com, stephanie.lesieur@gmail.com'}</p>
+              <p><strong>Cc:</strong> jerome.coppens@gmail.com, stephanie.lesieur@gmail.com</p>
               <p><strong>Sujet:</strong> {getSubjectLine()}</p>
               <p><strong>Message:</strong></p>
               <div className="email-body">{getEmailBody()}</div>
