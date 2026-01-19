@@ -48,8 +48,44 @@ function App() {
   
   // Auto-update custom subject and body when kids or date change
   useEffect(() => {
-    setCustomSubject(getSubjectLine());
-    setCustomBody(getEmailBody());
+    // Generate subject
+    let kidsText = '';
+    if (selectedKids.elea && selectedKids.malo) {
+      kidsText = 'Elea (3-4e année) et Malo (1ère année) Coppens';
+    } else if (selectedKids.elea) {
+      kidsText = 'Elea (3-4e année) Coppens';
+    } else if (selectedKids.malo) {
+      kidsText = 'Malo (1ère année) Coppens';
+    }
+    
+    if (kidsText && pickupDate) {
+      const date = new Date(pickupDate + 'T00:00:00');
+      const days = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+      const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 
+                      'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+      const dayName = days[date.getDay()];
+      const day = date.getDate();
+      const month = months[date.getMonth()];
+      const year = date.getFullYear();
+      const formattedDate = `${dayName} ${day} ${month} ${year}`;
+      
+      const subject = `Pas de bus (205) pour ${kidsText} - ${formattedDate}`;
+      setCustomSubject(subject);
+      
+      // Generate body
+      const verb = (selectedKids.elea && selectedKids.malo) ? 'ne prendront pas' : 'ne prendra pas';
+      const body = `Bonjour !
+
+Veuillez s'il vous plaît prendre note que ${kidsText} ${verb} le bus (205) ce ${formattedDate}.
+
+Merci d'avance et excellent début de semaine !
+
+Jerome et Stephanie Coppens - Lesieur`;
+      setCustomBody(body);
+    } else {
+      setCustomSubject('');
+      setCustomBody('');
+    }
   }, [selectedKids, pickupDate]);
 
   const handleKidChange = (kid) => {
