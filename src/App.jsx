@@ -128,28 +128,6 @@ Jerome et Stephanie Coppens - Lesieur`;
     return '';
   };
 
-  const getSubjectLine = () => {
-    const kidsText = getKidsText();
-    if (!kidsText || !pickupDate) return '';
-    
-    return `Pas de bus (205) pour ${kidsText} - ${formatDate(pickupDate)}`;
-  };
-
-  const getEmailBody = () => {
-    const kidsText = getKidsText();
-    if (!kidsText || !pickupDate) return '';
-    
-    const verb = (selectedKids.elea && selectedKids.malo) ? 'ne prendront pas' : 'ne prendra pas';
-    
-    return `Bonjour !
-
-Veuillez s'il vous plaît prendre note que ${kidsText} ${verb} le bus (205) ce ${formatDate(pickupDate)}.
-
-Merci d'avance et excellent début de semaine !
-
-Jerome et Stephanie Coppens - Lesieur`;
-  };
-
   const getRecipientEmails = () => {
     const emails = [];
     if (recipients.ecole_anse) emails.push('ecole_anse_au_sable@csf.bc.ca');
