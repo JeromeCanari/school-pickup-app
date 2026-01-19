@@ -23,6 +23,10 @@ function App() {
 
   const [sending, setSending] = useState(false);
   const [message, setMessage] = useState('');
+  
+  // State for custom editable subject and body
+  const [customSubject, setCustomSubject] = useState('');
+  const [customBody, setCustomBody] = useState('');
 
   // Auto-update recipients based on selected kids
   useEffect(() => {
@@ -41,6 +45,12 @@ function App() {
     tomorrow.setDate(tomorrow.getDate() + 1);
     setPickupDate(tomorrow.toISOString().split('T')[0]);
   }, []);
+  
+  // Auto-update custom subject and body when kids or date change
+  useEffect(() => {
+    setCustomSubject(getSubjectLine());
+    setCustomBody(getEmailBody());
+  }, [selectedKids, pickupDate]);
 
   const handleKidChange = (kid) => {
     setSelectedKids(prev => ({
@@ -73,9 +83,9 @@ function App() {
 
   const getKidsText = () => {
     if (selectedKids.elea && selectedKids.malo) {
-      return 'Elea (3/4e année) et Malo (1ère année) Coppens';
+      return 'Elea (3-4e année) et Malo (1ère année) Coppens';
     } else if (selectedKids.elea) {
-      return 'Elea (3/4e année) Coppens';
+      return 'Elea (3-4e année) Coppens';
     } else if (selectedKids.malo) {
       return 'Malo (1ère année) Coppens';
     }
@@ -134,8 +144,8 @@ Jerome et Stephanie Coppens - Lesieur`;
       const templateParams = {
         to_email: recipientEmails || 'jerome.coppens@gmail.com',
         cc_email: 'jerome.coppens@gmail.com, stephanie.lesieur@gmail.com',
-        subject: getSubjectLine(),
-        message: getEmailBody()
+        subject: customSubject,
+        message: customBody
       };
 
       // Send email using EmailJS
@@ -153,6 +163,8 @@ Jerome et Stephanie Coppens - Lesieur`;
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
         setPickupDate(tomorrow.toISOString().split('T')[0]);
+        setCustomSubject('');
+        setCustomBody('');
         setMessage('');
       }, 2000);
 
@@ -249,15 +261,26 @@ Jerome et Stephanie Coppens - Lesieur`;
           <p className="helper-text">CC: jerome.coppens@gmail.com, stephanie.lesieur@gmail.com</p>
         </div>
 
-        {getSubjectLine() && (
+        {customSubject && (
           <div className="section preview">
-            <h2>Aperçu de l'email</h2>
+            <h2>Aperçu de l'email (modifiable)</h2>
             <div className="email-preview">
               <p><strong>To:</strong> {getRecipientEmails() || 'jerome.coppens@gmail.com, stephanie.lesieur@gmail.com'}</p>
               <p><strong>Cc:</strong> jerome.coppens@gmail.com, stephanie.lesieur@gmail.com</p>
-              <p><strong>Sujet:</strong> {getSubjectLine()}</p>
+              <p><strong>Sujet:</strong></p>
+              <input
+                type="text"
+                value={customSubject}
+                onChange={(e) => setCustomSubject(e.target.value)}
+                className="subject-input"
+              />
               <p><strong>Message:</strong></p>
-              <div className="email-body">{getEmailBody()}</div>
+              <textarea
+                value={customBody}
+                onChange={(e) => setCustomBody(e.target.value)}
+                className="body-textarea"
+                rows="8"
+              />
             </div>
           </div>
         )}

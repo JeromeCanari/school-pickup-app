@@ -145,6 +145,45 @@ h1 {
   border: 1px solid #e2e8f0;
 }
 
+.subject-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  border: 2px solid #cbd5e0;
+  border-radius: 8px;
+  transition: border-color 0.2s;
+  font-family: inherit;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  background: white;
+}
+
+.subject-input:focus {
+  outline: none;
+  border-color: #667eea;
+  background: #fff;
+}
+
+.body-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  border: 2px solid #cbd5e0;
+  border-radius: 8px;
+  transition: border-color 0.2s;
+  font-family: inherit;
+  margin-top: 8px;
+  background: white;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.body-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  background: #fff;
+}
+
 .send-button {
   width: 100%;
   padding: 16px;
