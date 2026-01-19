@@ -102,32 +102,6 @@ Jerome et Stephanie Coppens - Lesieur`;
     }));
   };
 
-  const formatDate = (dateString) => {
-    // Add time to ensure it's treated as local date, not UTC
-    const date = new Date(dateString + 'T00:00:00');
-    const days = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
-    const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 
-                    'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
-    
-    const dayName = days[date.getDay()];
-    const day = date.getDate();
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-    
-    return `${dayName} ${day} ${month} ${year}`;
-  };
-
-  const getKidsText = () => {
-    if (selectedKids.elea && selectedKids.malo) {
-      return 'Elea (3-4e année) et Malo (1ère année) Coppens';
-    } else if (selectedKids.elea) {
-      return 'Elea (3-4e année) Coppens';
-    } else if (selectedKids.malo) {
-      return 'Malo (1ère année) Coppens';
-    }
-    return '';
-  };
-
   const getRecipientEmails = () => {
     const emails = [];
     if (recipients.ecole_anse) emails.push('ecole_anse_au_sable@csf.bc.ca');
