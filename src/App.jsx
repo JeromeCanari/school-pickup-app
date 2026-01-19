@@ -3,7 +3,7 @@ import emailjs from '@emailjs/browser';
 import './App.css';
 
 // Initialize EmailJS with your public key (you'll add this after setting up EmailJS)
-emailjs.init("cfbRe3pJc2BrExC6b"); // We'll replace this later
+emailjs.init("cfbRe3pJc2BrExC6b");
 
 function App() {
   const [selectedKids, setSelectedKids] = useState({
@@ -82,22 +82,12 @@ function App() {
     const kidsText = getKidsText();
     if (!kidsText || !pickupDate) return '';
     
-    const date = new Date(pickupDate);
-    const dayNum = date.getDate();
-    const month = date.toLocaleDateString('fr-FR', { month: 'long' });
-    const year = date.getFullYear();
-    
     return `Pas de bus (205) pour ${kidsText} - ${formatDate(pickupDate)}`;
   };
 
   const getEmailBody = () => {
     const kidsText = getKidsText();
     if (!kidsText || !pickupDate) return '';
-
-    const date = new Date(pickupDate);
-    const dayNum = date.getDate();
-    const month = date.toLocaleDateString('fr-FR', { month: 'long' });
-    const year = date.getFullYear();
     
     const verb = (selectedKids.elea && selectedKids.malo) ? 'ne prendront pas' : 'ne prendra pas';
     
@@ -150,8 +140,8 @@ Jerome et Stephanie Coppens - Lesieur`;
 
       // Send email using EmailJS
       await emailjs.send(
-        'service_u2gb2og',  // We'll replace this
-        'template_8svi0g9', // We'll replace this
+        'service_u2gb2og',
+        'template_8svi0g9',
         templateParams
       );
 
@@ -264,7 +254,7 @@ Jerome et Stephanie Coppens - Lesieur`;
 
         <button 
           onClick={handleSend} 
-          disabled={sending || !selectedKids.elea && !selectedKids.malo}
+          disabled={sending || (!selectedKids.elea && !selectedKids.malo)}
           className="send-button"
         >
           {sending ? 'Envoi en cours...' : 'Envoyer l\'email'}
